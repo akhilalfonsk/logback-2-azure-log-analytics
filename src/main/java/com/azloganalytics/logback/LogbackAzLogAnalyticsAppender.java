@@ -125,7 +125,7 @@ public class LogbackAzLogAnalyticsAppender extends UnsynchronizedAppenderBase<IL
 
 
 	/**
-	 * @see org.apache.log4j.AppenderSkeleton#activateOptions()
+	 * @see org.apache.Logback.AppenderSkeleton#activateOptions()
 	 */
 	public void activateOptions() {
 		try {
@@ -137,22 +137,18 @@ public class LogbackAzLogAnalyticsAppender extends UnsynchronizedAppenderBase<IL
 
 			if (StringUtils.isEmpty(workspaceId)) {
 				throw new Exception(
-						String.format("the Log4jALAAppender property workspaceId [%s] shouldn't be empty (log4j.xml)",
-								this.workspaceId));
+						String.format("the LogbackALAAppender property workspaceId [%s] shouldn't be empty (Logback.xml)",this.workspaceId));
 			}
 			if (StringUtils.isEmpty(sharedKey)) {
-				throw new Exception(String.format(
-						"the Log4jALAAppender property sharedKey [%s] shouldn't be empty (log4j.xml)", this.sharedKey));
+				throw new Exception(String.format("the LogbackALAAppender property sharedKey [%s] shouldn't be empty (Logback.xml)", this.sharedKey));
 			}
 			if (StringUtils.isEmpty(logType)) {
-				throw new Exception(String.format(
-						"the Log4jALAAppender property logType [%s] shouldn't be empty (log4j.xml)", this.logType));
+				throw new Exception(String.format("the LogbackALAAppender property logType [%s] shouldn't be empty (Logback.xml)", this.logType));
 			}
 
 			serializer = new LoggingEventSerializer();
 
-			httpDataCollector = new HTTPDataCollector(this.workspaceId, this.sharedKey,
-					this.threadPoolSize <= 0 ? 1000 : this.threadPoolSize, this, this.proxyHost, this.proxyPort);
+			httpDataCollector = new HTTPDataCollector(this.workspaceId, this.sharedKey,this.threadPoolSize <= 0 ? 1000 : this.threadPoolSize, this, this.proxyHost, this.proxyPort);
 
 		} catch (Exception e) {
 			logError(String.format("Unexpected exception while initialising HTTPDataCollector.%1s", e.getMessage()), e);
@@ -162,12 +158,11 @@ public class LogbackAzLogAnalyticsAppender extends UnsynchronizedAppenderBase<IL
 	@Override
 	protected void append(ILoggingEvent  loggingEvent) {
 		try {
+			
 			if (httpDataCollector != null) {
 				String content = serializer.serializeLoggingEvents(new ArrayList<ILoggingEvent>(Arrays.asList(loggingEvent)), this);
-				// Info(content);
 
-				httpDataCollector.collect(logType, content,
-						StringUtils.isEmpty(azureApiVersion) ? "2016-04-01" : azureApiVersion, "DateValue");
+				httpDataCollector.collect(logType, content,StringUtils.isEmpty(azureApiVersion) ? "2016-04-01" : azureApiVersion, "DateValue");
 			} else {
 				System.out.println("Couldn't append log message during the HTTPDataCollector isn't initialized.");
 			}
