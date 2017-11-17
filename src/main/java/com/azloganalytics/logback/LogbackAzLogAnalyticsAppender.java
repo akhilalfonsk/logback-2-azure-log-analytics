@@ -159,9 +159,10 @@ public class LogbackAzLogAnalyticsAppender extends UnsynchronizedAppenderBase<IL
 	protected void append(ILoggingEvent  loggingEvent) {
 		try {
 			
+			if(httpDataCollector==null) activateOptions();
+			
 			if (httpDataCollector != null) {
 				String content = serializer.serializeLoggingEvents(new ArrayList<ILoggingEvent>(Arrays.asList(loggingEvent)), this);
-
 				httpDataCollector.collect(logType, content,StringUtils.isEmpty(azureApiVersion) ? "2016-04-01" : azureApiVersion, "DateValue");
 			} else {
 				System.out.println("Couldn't append log message during the HTTPDataCollector isn't initialized.");

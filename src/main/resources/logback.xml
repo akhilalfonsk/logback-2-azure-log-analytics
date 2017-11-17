@@ -12,12 +12,13 @@
 
 
 	<appender name="AzLogAnalytics" class="com.azloganalytics.logback.LogbackAzLogAnalyticsAppender">
-		<workspaceId>YOUR_WORKSPACE_ID</workspaceId>
-		<sharedKey>YOUR_SHARED_KEY</sharedKey>
-		<logType>YOUR_LOG_TYPE</logType>
+		<workspaceId>a</workspaceId>
+		<sharedKey>7</sharedKey>
+		<logType>POCLog</logType>
+		<proxyHost></proxyHost>
+		<proxyPort>3128</proxyPort>
 	</appender>
 
-	<!-- Currently recommended way of using Slack appender -->
 	<appender name="ASYNC_AzLogAnalytics" class="ch.qos.logback.classic.AsyncAppender">
 		<appender-ref ref="AzLogAnalytics" />
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">

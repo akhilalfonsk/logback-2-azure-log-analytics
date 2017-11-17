@@ -118,7 +118,7 @@ public class HTTPDataCollector {
 	 */
 	public void collect(String logType, String jsonPayload, String apiVersion, String timeGeneratedPropertyName)
 			throws Exception {
-		executorService.execute(new Runnable() {
+		/*executorService.execute(new Runnable() {
 			public void run() {
 				try {
 					sendHTTPDataCollectorAPIRequest(logType, jsonPayload, apiVersion, timeGeneratedPropertyName);
@@ -128,8 +128,8 @@ public class HTTPDataCollector {
 							e);
 				}
 			}
-		});
-
+		});*/
+		sendHTTPDataCollectorAPIRequest(logType, jsonPayload, apiVersion, timeGeneratedPropertyName);
 	}
 
 	/**
@@ -172,14 +172,12 @@ public class HTTPDataCollector {
 					.build();
 
 			if(this.proxyHost == null || this.proxyPort == null ){
-				client = HttpClients.custom().setSSLContext(sslContext).setSSLHostnameVerifier(new NoopHostnameVerifier())
-						.setRetryHandler((exception, executionCount,
-								context) -> executionCount < (Integer) context.getAttribute("retry.count")).build();
+				//client = HttpClients.custom().setSSLContext(sslContext).setSSLHostnameVerifier(new NoopHostnameVerifier()).setRetryHandler((exception, executionCount,context) -> executionCount < (Integer) context.getAttribute("retry.count")).build();
+				client = HttpClients.custom().setSSLContext(sslContext).setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
 			}else{
-				client = HttpClients.custom().setSSLContext(sslContext).setSSLHostnameVerifier(new NoopHostnameVerifier())
-						.setRetryHandler((exception, executionCount,
-								context) -> executionCount < (Integer) context.getAttribute("retry.count"))
-						.setProxy(new HttpHost(this.proxyHost, this.proxyPort))
+				//client = HttpClients.custom().setSSLContext(sslContext).setSSLHostnameVerifier(new NoopHostnameVerifier()).setRetryHandler((exception, executionCount,context) -> executionCount < (Integer) context.getAttribute("retry.count")).setProxy(new HttpHost(this.proxyHost, this.proxyPort))
+				client = HttpClients.custom().setSSLContext(sslContext).setSSLHostnameVerifier(new NoopHostnameVerifier()).setProxy(new HttpHost(this.proxyHost, this.proxyPort))
+
 						/*
 						 * .setServiceUnavailableRetryStrategy(new
 						 * ServiceUnavailableRetryStrategy() {
@@ -218,7 +216,8 @@ public class HTTPDataCollector {
 			}
 
 		} catch (Exception e) {
-			appender.logError("Error sendHTTPDataCollectorAPIRequest", e);
+			//appender.logError("Error sendHTTPDataCollectorAPIRequest", e);
+			e.printStackTrace();
 		} finally {
 
 			if (client != null) {
