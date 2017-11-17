@@ -11,13 +11,13 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ch.qos.logback.classic.spi.LoggingEvent;
+import ch.qos.logback.classic.spi.ILoggingEvent;
 
 public class LoggingEventSerializer {
 
 	private ObjectMapper jsonMapper = new ObjectMapper();
 
-	public String serializeLoggingEvents(ArrayList<LoggingEvent> loggingEvents, LogbackAzLogAnalyticsAppender appender) {
+	public String serializeLoggingEvents(ArrayList<ILoggingEvent> loggingEvents, LogbackAzLogAnalyticsAppender appender) {
 		StringBuffer sb = new StringBuffer();
 
 		loggingEvents.forEach(loggingEvent -> {
@@ -32,7 +32,7 @@ public class LoggingEventSerializer {
 		return sb.toString();
 	}
 
-	private String serializeLoggingEvent(LoggingEvent loggingEvent, LogbackAzLogAnalyticsAppender appender)
+	private String serializeLoggingEvent(ILoggingEvent loggingEvent, LogbackAzLogAnalyticsAppender appender)
 			throws JsonProcessingException {
 		// http://stackoverflow.com/questions/11294307/convert-java-date-to-utc-string
 		String ISO_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS zzz";

@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.azloganalytics.http.HTTPDataCollector;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 
 public class LogbackAzLogAnalyticsAppender extends UnsynchronizedAppenderBase<ILoggingEvent>{
@@ -156,22 +155,21 @@ public class LogbackAzLogAnalyticsAppender extends UnsynchronizedAppenderBase<IL
 					this.threadPoolSize <= 0 ? 1000 : this.threadPoolSize, this, this.proxyHost, this.proxyPort);
 
 		} catch (Exception e) {
-			errorHandler.error("Unexpected exception while initialising HTTPDataCollector.", e,ErrorCode.GENERIC_FAILURE);
+			logError(String.format("Unexpected exception while initialising HTTPDataCollector.%1s", e.getMessage()), e);
 		}
 	}
 
-	
-	protected void append(LoggingEvent loggingEvent) {
+	@Override
+	protected void append(ILoggingEvent  loggingEvent) {
 		try {
 			if (httpDataCollector != null) {
-				String content = serializer
-						.serializeLoggingEvents(new ArrayList<LoggingEvent>(Arrays.asList(loggingEvent)), this);
+				String content = serializer.serializeLoggingEvents(new ArrayList<ILoggingEvent>(Arrays.asList(loggingEvent)), this);
 				// Info(content);
 
 				httpDataCollector.collect(logType, content,
 						StringUtils.isEmpty(azureApiVersion) ? "2016-04-01" : azureApiVersion, "DateValue");
 			} else {
-				errorHandler.error("Couldn't append log message during the HTTPDataCollector isn't initialized.");
+				System.out.println("Couldn't append log message during the HTTPDataCollector isn't initialized.");
 			}
 		} catch (Exception ex) {
 			logError(String.format("Unable to send data to Azure Log Analytics: %1s", ex.getMessage()), ex);
@@ -185,15 +183,10 @@ public class LogbackAzLogAnalyticsAppender extends UnsynchronizedAppenderBase<IL
 	}
 
 	public void logError(String message, Exception e) {
-		errorHandler.error(message, e, ErrorCode.GENERIC_FAILURE);
+		e.printStackTrace();
 
 	}
 
-	@Override
-	protected void append(ILoggingEvent eventObject) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 }
