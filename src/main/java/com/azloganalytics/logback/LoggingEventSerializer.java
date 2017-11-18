@@ -24,7 +24,7 @@ public class LoggingEventSerializer {
 			try {
 				sb.append(serializeLoggingEvent(loggingEvent, appender));
 			} catch (JsonProcessingException e) {
-				appender.addError("Error serializing logging event", e);
+				appender.logError("Error serializing logging event", e);
 			}
 			sb.append(System.lineSeparator());
 		});

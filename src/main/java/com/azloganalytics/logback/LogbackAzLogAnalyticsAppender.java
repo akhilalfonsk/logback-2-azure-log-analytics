@@ -124,14 +124,10 @@ public class LogbackAzLogAnalyticsAppender extends UnsynchronizedAppenderBase<IL
 	}
 
 
-	/**
-	 * @see org.apache.Logback.AppenderSkeleton#activateOptions()
-	 */
-	public void activateOptions() {
+	public void initHttpDataCollector() {
 		try {
 			// Close previous connections if reactivating
 			if (httpDataCollector != null) {
-				//httpDataCollector.close();
 				close();
 			}
 
@@ -159,13 +155,13 @@ public class LogbackAzLogAnalyticsAppender extends UnsynchronizedAppenderBase<IL
 	protected void append(ILoggingEvent  loggingEvent) {
 		try {
 			
-			if(httpDataCollector==null) activateOptions();
+			if(httpDataCollector==null) initHttpDataCollector();
 			
 			if (httpDataCollector != null) {
 				String content = serializer.serializeLoggingEvents(new ArrayList<ILoggingEvent>(Arrays.asList(loggingEvent)), this);
 				httpDataCollector.collect(logType, content,StringUtils.isEmpty(azureApiVersion) ? "2016-04-01" : azureApiVersion, "DateValue");
 			} else {
-				System.out.println("Couldn't append log message during the HTTPDataCollector isn't initialized.");
+				throw new Exception("Couldn't append log message during the HTTPDataCollector isn't initialized.");
 			}
 		} catch (Exception ex) {
 			logError(String.format("Unable to send data to Azure Log Analytics: %1s", ex.getMessage()), ex);
@@ -173,7 +169,6 @@ public class LogbackAzLogAnalyticsAppender extends UnsynchronizedAppenderBase<IL
 
 	}
 
-	
 	public void close() {
 		httpDataCollector.close();
 	}
@@ -182,7 +177,4 @@ public class LogbackAzLogAnalyticsAppender extends UnsynchronizedAppenderBase<IL
 		e.printStackTrace();
 
 	}
-
-
-
 }
