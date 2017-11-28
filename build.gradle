@@ -36,6 +36,5 @@ dependencies {
 	testCompile group: 'io.codearte.jfairy', name: 'jfairy', version: '0.5.9'
 
 	
-	
     testCompile 'junit:junit:4.12'
 }
