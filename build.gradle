@@ -32,5 +32,10 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
 	
+	// https://mvnrepository.com/artifact/io.codearte.jfairy/jfairy
+	testCompile group: 'io.codearte.jfairy', name: 'jfairy', version: '0.5.9'
+
+	
+	
     testCompile 'junit:junit:4.12'
 }
