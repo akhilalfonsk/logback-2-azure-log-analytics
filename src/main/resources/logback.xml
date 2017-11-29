@@ -11,12 +11,16 @@
 	</appender>
 
 
-	<appender name="AzLogAnalytics" class="com.azloganalytics.logback.LogbackAzLogAnalyticsAppender">
-		<workspaceId>a</workspaceId>
-		<sharedKey>7</sharedKey>
-		<logType>POCLog</logType>
-		<proxyHost></proxyHost>
+	<appender name="AzLogAnalytics"
+		class="com.azloganalytics.logback.LogbackAzLogAnalyticsAppender">
+		<workspaceId>abf72842-1085-47e5-b72d-894dffeb303c</workspaceId>
+		<sharedKey>7vClPzJ1ni+YIIPUXGgwH5bnaIupKQy5jT/vZsAsH+gE8opJrmJ0MizAawxt1smmVLfGNEXe+Ji2RvCm/ba05w==</sharedKey>
+		<logType>GateEntry</logType>
+		<Environment>Development</Environment>
+		<KeyValueMode>Enabled</KeyValueMode>
+		<proxyHost>pun-proxy.net.plm.eds.com</proxyHost>
 		<proxyPort>3128</proxyPort>
+
 	</appender>
 
 	<appender name="ASYNC_AzLogAnalytics" class="ch.qos.logback.classic.AsyncAppender">
@@ -30,7 +34,4 @@
 		<level value="ALL" />
 		<appender-ref ref="AzLogAnalytics" />
 	</root>
-
-	<!-- By default, the level of the root level is set to DEBUG -->
-	<!-- <root level="ERROR"> <appender-ref ref="STDOUT" /> </root> -->
 </configuration>

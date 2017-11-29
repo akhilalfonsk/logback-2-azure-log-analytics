@@ -26,6 +26,8 @@ public class LogbackAzLogAnalyticsAppender extends UnsynchronizedAppenderBase<IL
 	private Boolean appendLogLevel;
 	private static HTTPDataCollector httpDataCollector;
 	private LoggingEventSerializer serializer;
+	
+	private String keyValueMode;
 
 	public String getWorkspaceId() {
 		return workspaceId;
@@ -123,6 +125,10 @@ public class LogbackAzLogAnalyticsAppender extends UnsynchronizedAppenderBase<IL
 		this.appendLogLevel = appendLogLevel;
 	}
 
+	public boolean isKeyValueModeEnabled() {
+		if(this.keyValueMode!=null && this.keyValueMode.equalsIgnoreCase("Enabled")) return true;
+		else return false;
+	}
 
 	public void initHttpDataCollector() {
 		try {
@@ -176,5 +182,13 @@ public class LogbackAzLogAnalyticsAppender extends UnsynchronizedAppenderBase<IL
 	public void logError(String message, Exception e) {
 		e.printStackTrace();
 
+	}
+
+	public String getKeyValueMode() {
+		return keyValueMode;
+	}
+
+	public void setKeyValueMode(String keyValueMode) {
+		this.keyValueMode = keyValueMode;
 	}
 }
